@@ -103,7 +103,7 @@
         <Button
             Style="{StaticResource DigitButtonStyle}"
             Click="NumberButton_Click"
-            Content="9"
+            Content="7"
             Grid.Row="1" Grid.Column="0">
         </Button>
         <Button
