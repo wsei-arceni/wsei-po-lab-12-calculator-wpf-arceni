@@ -12,6 +12,7 @@ namespace CalculatorWPF
         double secondNumber = 0;
         string operatorSymbol = "";
         bool hasFirstNumber = false;
+        bool shouldClearDisplay = false;
 
         public MainWindow()
         {
@@ -22,15 +23,23 @@ namespace CalculatorWPF
         {
             Button? button = sender as Button;
             string? number = button?.Content?.ToString();
-            string currentResult = (string)ResultTextBox.Content;
-
-            if (currentResult == "0")
+            
+            if (shouldClearDisplay)
             {
                 ResultTextBox.Content = number;
+                shouldClearDisplay = false;
             }
             else
             {
-                ResultTextBox.Content += number;
+                string currentResult = (string)ResultTextBox.Content;
+                if (currentResult == "0")
+                {
+                    ResultTextBox.Content = number;
+                }
+                else
+                {
+                    ResultTextBox.Content += number;
+                }
             }
         }
 
@@ -40,7 +49,7 @@ namespace CalculatorWPF
             string newOperatorSymbol = button.Content.ToString();
             string currentResult = (string)ResultTextBox.Content;
 
-            if (hasFirstNumber && operatorSymbol != "" && currentResult != "0")
+            if (hasFirstNumber && operatorSymbol != "" && currentResult != "0" && !shouldClearDisplay)
             {
                 secondNumber = double.Parse(currentResult, _cultureInfo);
                 double result = PerformOperation(firstNumber, secondNumber, operatorSymbol);
@@ -54,18 +63,22 @@ namespace CalculatorWPF
             }
 
             operatorSymbol = newOperatorSymbol;
-            ResultTextBox.Content = "0";
+            shouldClearDisplay = true;
         }
 
         private void EqualsButton_Click(object sender, RoutedEventArgs e)
         {
-            string currentResult = (string)ResultTextBox.Content;
-            secondNumber = double.Parse(currentResult, _cultureInfo);
+            if (!shouldClearDisplay)
+            {
+                string currentResult = (string)ResultTextBox.Content;
+                secondNumber = double.Parse(currentResult, _cultureInfo);
 
-            double result = PerformOperation(firstNumber, secondNumber, operatorSymbol);
-            ResultTextBox.Content = result.ToString(_cultureInfo);
-            hasFirstNumber = false;
-            operatorSymbol = "";
+                double result = PerformOperation(firstNumber, secondNumber, operatorSymbol);
+                ResultTextBox.Content = result.ToString(_cultureInfo);
+                hasFirstNumber = false;
+                operatorSymbol = "";
+                shouldClearDisplay = true;
+            }
         }
 
         private void ClearButton_Click(object sender, RoutedEventArgs e)
@@ -74,6 +87,7 @@ namespace CalculatorWPF
             secondNumber = 0;
             operatorSymbol = "";
             hasFirstNumber = false;
+            shouldClearDisplay = false;
             ResultTextBox.Content = "0";
         }
 
@@ -102,6 +116,12 @@ namespace CalculatorWPF
 
         private void DotButton_Click(object sender, RoutedEventArgs e)
         {
+            if (shouldClearDisplay)
+            {
+                ResultTextBox.Content = "0";
+                shouldClearDisplay = false;
+            }
+            
             if (((string)(ResultTextBox.Content)).Contains("."))
             {
                 return;
