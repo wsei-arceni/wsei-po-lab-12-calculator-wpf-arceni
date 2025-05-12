@@ -4,7 +4,6 @@ using System.Windows.Controls;
 
 namespace CalculatorWPF
 {
-     
     public partial class MainWindow : Window
     {
         private State _state = State.Number;
@@ -12,6 +11,8 @@ namespace CalculatorWPF
         double firstNumber = 0;
         double secondNumber = 0;
         string operatorSymbol = "";
+        bool hasFirstNumber = false;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -36,14 +37,24 @@ namespace CalculatorWPF
         private void OperatorButton_Click(object sender, RoutedEventArgs e)
         {
             Button button = (Button)sender;
-            operatorSymbol = button.Content.ToString();
+            string newOperatorSymbol = button.Content.ToString();
             string currentResult = (string)ResultTextBox.Content;
 
-            if (currentResult != "0")
+            if (hasFirstNumber && operatorSymbol != "" && currentResult != "0")
+            {
+                secondNumber = double.Parse(currentResult, _cultureInfo);
+                double result = PerformOperation(firstNumber, secondNumber, operatorSymbol);
+                ResultTextBox.Content = result.ToString(_cultureInfo);
+                firstNumber = result;
+            }
+            else if (currentResult != "0")
             {
                 firstNumber = double.Parse(currentResult, _cultureInfo);
-                ResultTextBox.Content = "0";
+                hasFirstNumber = true;
             }
+
+            operatorSymbol = newOperatorSymbol;
+            ResultTextBox.Content = "0";
         }
 
         private void EqualsButton_Click(object sender, RoutedEventArgs e)
@@ -52,7 +63,9 @@ namespace CalculatorWPF
             secondNumber = double.Parse(currentResult, _cultureInfo);
 
             double result = PerformOperation(firstNumber, secondNumber, operatorSymbol);
-            ResultTextBox.Content= result.ToString(_cultureInfo);
+            ResultTextBox.Content = result.ToString(_cultureInfo);
+            hasFirstNumber = false;
+            operatorSymbol = "";
         }
 
         private void ClearButton_Click(object sender, RoutedEventArgs e)
@@ -60,6 +73,7 @@ namespace CalculatorWPF
             firstNumber = 0;
             secondNumber = 0;
             operatorSymbol = "";
+            hasFirstNumber = false;
             ResultTextBox.Content = "0";
         }
 
