@@ -65,6 +65,22 @@ namespace CalculatorWPF
             operatorSymbol = newOperatorSymbol;
             shouldClearDisplay = true;
         }
+        
+        private void ClearLastNumber_Click(object sender, RoutedEventArgs e)
+        {
+            if (!shouldClearDisplay)
+            {
+                string currentResult = (string)ResultTextBox.Content;
+                if (currentResult.Length > 1)
+                {
+                    ResultTextBox.Content = currentResult.Substring(0, currentResult.Length - 1);
+                }
+                else
+                {
+                    ResultTextBox.Content = "0";
+                }
+            }
+        }
 
         private void EqualsButton_Click(object sender, RoutedEventArgs e)
         {

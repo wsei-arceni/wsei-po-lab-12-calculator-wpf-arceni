@@ -6,7 +6,7 @@
         mc:Ignorable="d"
         Title="Calculator" 
         Height="600" 
-        Width="400"
+        Width="500"
         MinHeight="480"
         MinWidth="360"
         Background="#0d1b2a"
@@ -78,6 +78,7 @@
             <ColumnDefinition></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
         <Label
@@ -114,6 +115,8 @@
                 Grid.Column="2" />
         <Button Style="{StaticResource ButtonStyle}" Content="/" Click="OperatorButton_Click" Grid.Row="1"
                 Grid.Column="3" />
+        <Button Style="{StaticResource ButtonStyle}" Content="&lt;" Click="ClearLastNumber_Click" Grid.Row="1"
+                Grid.Column="4" />
 
         <Button Style="{StaticResource DigitButtonStyle}" Content="4" Click="NumberButton_Click" Grid.Row="2"
                 Grid.Column="0" />
